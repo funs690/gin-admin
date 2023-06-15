@@ -5,6 +5,7 @@ import (
 	"gin-admin/models"
 	"gin-admin/service"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 type User struct {
@@ -20,19 +21,27 @@ func Login(c *gin.Context) {
 		http.FailWithMsg(c, 500, "parse parma error")
 	}
 	userInfo := service.UserService.FindUserByUserName(user.UserName)
-	if userInfo == nil || userInfo.PassWord != user.PassWord {
-		http.FailWithMsg(c, 401, "login failed")
+	if userInfo == nil {
+		http.FailWithMsg(c, 401, "user not found")
+		return
+	}
+	if userInfo.PassWord != user.PassWord {
+		http.FailWithMsg(c, 401, "pass world is incorrect")
 		return
 	}
 	// do login
 	http.OkWithMsg(c, "login success")
 }
 
+// do register
 func Register(c *gin.Context) {
 	user := new(models.User)
 	if err := c.ShouldBindJSON(&user); err != nil {
 		http.FailWithMsg(c, 500, "parse parma error")
 	}
-	service.UserService.Save(user)
+	if err := service.UserService.Save(user); err != nil {
+		log.Println(err)
+		http.FailWithMsg(c, 500, "create user failed")
+	}
 	http.OkWithMsg(c, "register success")
 }

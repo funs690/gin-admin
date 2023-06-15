@@ -17,8 +17,8 @@ type UserSvc struct {
 }
 
 // user save
-func (p *UserSvc) Save(user *models.User) {
-	models.Save(user)
+func (p *UserSvc) Save(user *models.User) error {
+	return models.Save(user)
 }
 
 // 查询用户

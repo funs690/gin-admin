@@ -1,7 +1,5 @@
 package models
 
-import "fmt"
-
 type User struct {
 	Id       string `gorm:"column:id;primaryKey;default:uuid_generate_v4()" json:"id"`
 	UserName string `gorm:"column:user_name" json:"userName"`
@@ -10,11 +8,9 @@ type User struct {
 }
 
 // 创建用户
-func Save(user *User) {
+func Save(user *User) error {
 	result := db.Create(&user)
-	if result.Error != nil {
-		fmt.Print(result.Error)
-	}
+	return result.Error
 }
 
 // 获取单个用户

@@ -13,9 +13,9 @@ func InitApplicationConfig() *viper.Viper {
 	config.SetConfigType("yaml")
 	if err := config.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Fatal("config file not found ...")
+			log.Println("config file not found ...")
 		} else {
-			log.Fatal("parse error ...")
+			log.Println("parse error ...")
 		}
 	}
 	return config
