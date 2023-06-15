@@ -1,6 +1,7 @@
 package upm
 
 import (
+	"gin-admin/auth"
 	http "gin-admin/common"
 	"gin-admin/models"
 	"gin-admin/service"
@@ -29,8 +30,10 @@ func Login(c *gin.Context) {
 		http.FailWithMsg(c, 401, "pass world is incorrect")
 		return
 	}
+	// generator token
+	token, _ := auth.GenerateToken(userInfo)
 	// do login
-	http.OkWithMsg(c, "login success")
+	http.OkWithData(c, token)
 }
 
 // do register

@@ -1,6 +1,8 @@
 package routers
 
 import (
+	"gin-admin/auth"
+	"gin-admin/web/index"
 	"gin-admin/web/upm"
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +11,20 @@ import (
 func InitRouters(r *gin.Engine) {
 	// ser user router
 	UserRouter(r)
+	// index router
+	IndexRouter(r)
+
+}
+
+// set index router
+func IndexRouter(r *gin.Engine) {
+	indexv1 := r.Group("v1/index")
+	// 设置权限验证
+	indexv1.Use(auth.JwtHandler())
+	// 设置router
+	{
+		indexv1.GET("/", index.Index)
+	}
 }
 
 // user router
