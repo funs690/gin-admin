@@ -1,0 +1,8 @@
+port: 8000
+
+database:
+  host: 183.129.217.214
+  port: 20080
+  database: beego
+  username: beego
+  password: Abc123++
