@@ -18,3 +18,19 @@ func FindOne(user *User) *User {
 	db.Where(&user).Take(&user)
 	return user
 }
+
+// 获取用户列表
+func FindList(user *User) *[]User {
+	var users *[]User
+	result := db.Where(&user).Find(&users)
+	if result.Error != nil {
+		return nil
+	}
+	return users
+}
+
+// 数据删除
+func Delete(user *User) error {
+	result := db.Delete(&user)
+	return result.Error
+}

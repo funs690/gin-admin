@@ -2,6 +2,7 @@ package upm
 
 import (
 	"errors"
+	"fmt"
 	"gin-admin/auth"
 	"gin-admin/models"
 )
@@ -34,4 +35,13 @@ func (p *UserSvc) Login(user *models.User) (string, error) {
 	}
 	// generator token
 	return auth.GenerateToken(userInfo)
+}
+
+// 获取数据
+func (p *UserSvc) Test() {
+	users := models.FindList(&models.User{})
+	for _, user := range *users {
+		fmt.Print(user.UserName)
+
+	}
 }
