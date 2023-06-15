@@ -15,7 +15,6 @@ func Save(user *User) error {
 
 // 获取单个用户
 func FindOne(user *User) *User {
-	//db.Take(&user)
 	db.Where(&user).Take(&user)
 	return user
 }

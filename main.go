@@ -11,11 +11,11 @@ import (
 func main() {
 	// create gin
 	r := gin.Default()
-	config := config.InitApplicationConfig()
+	appConfig := config.InitApplicationConfig()
 	// init database
-	models.InitDbLink(config)
+	models.InitDbLink(appConfig)
 	// init routes
 	routers.InitRouters(r)
 	// run server
-	r.Run(fmt.Sprintf(":%d", config.GetInt("port")))
+	r.Run(fmt.Sprintf(":%d", appConfig.GetInt("port")))
 }

@@ -20,9 +20,9 @@ func InitDbLink(config *viper.Viper) *gorm.DB {
 	port, _ := strconv.Atoi(database["port"])
 	user := database["username"]
 	password := database["password"]
-	db_name := database["database"]
+	dbName := database["database"]
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
-		host, user, password, db_name, port)
+		host, user, password, dbName, port)
 	db, _ = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "tb_",
