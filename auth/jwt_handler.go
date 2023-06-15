@@ -16,6 +16,9 @@ func JwtHandler() gin.HandlerFunc {
 			// 解析token
 			claims, err := ParseToken(token)
 			if err == nil || time.Now().Unix() > claims.ExpiresAt {
+				// 设置uid
+				c.Set("uid", claims.Id)
+				// 请求继续
 				c.Next()
 				return
 			}

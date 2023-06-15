@@ -13,7 +13,7 @@ var jwtSecret = []byte(jwtConfig.GetString("jwt.secret"))
 type Claims struct {
 	Id       string `json:"uid""`
 	UserName string `json:"username"`
-	PassWord string `json:"password"`
+	//PassWord string `json:"password"`
 	jwt.StandardClaims
 }
 
@@ -26,7 +26,7 @@ func GenerateToken(user *models.User) (string, error) {
 	claims := Claims{
 		Id:       user.Id,
 		UserName: user.UserName,
-		PassWord: user.PassWord,
+		//PassWord: user.PassWord,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime,                      // 过期时间
 			Issuer:    jwtConfig.GetString("jwt.sign"), //指定发行人
