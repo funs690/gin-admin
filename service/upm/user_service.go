@@ -1,6 +1,8 @@
 package upm
 
 import (
+	"errors"
+	"gin-admin/auth"
 	"gin-admin/models"
 )
 
@@ -17,13 +19,19 @@ type UserSvc struct {
 }
 
 // user save
-func (p *UserSvc) Save(user *models.User) error {
+func (p *UserSvc) Register(user *models.User) error {
 	return models.Save(user)
 }
 
-// 查询用户
-func (p *UserSvc) FindUserByUserName(userName string) *models.User {
-	user := new(models.User)
-	user.UserName = userName
-	return models.FindOne(user)
+// user login
+func (p *UserSvc) Login(user *models.User) (string, error) {
+	userInfo := models.FindOne(&models.User{UserName: user.UserName})
+	if userInfo.Id == "" {
+		return "", errors.New("user not found")
+	}
+	if userInfo.PassWord != user.PassWord {
+		return "", errors.New("password is incorrect")
+	}
+	// generator token
+	return auth.GenerateToken(userInfo)
 }

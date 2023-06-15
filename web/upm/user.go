@@ -1,7 +1,6 @@
 package upm
 
 import (
-	"gin-admin/auth"
 	http "gin-admin/common"
 	"gin-admin/models"
 	"gin-admin/service"
@@ -9,29 +8,17 @@ import (
 	"log"
 )
 
-type User struct {
-	UserName string
-	PassWord string
-	Name     string
-}
-
 // do login
 func Login(c *gin.Context) {
-	user := User{}
+	user := new(models.User)
 	if err := c.ShouldBindJSON(&user); err != nil {
 		http.FailWithMsg(c, 500, "parse parma error")
 	}
-	userInfo := service.UserService.FindUserByUserName(user.UserName)
-	if userInfo == nil {
-		http.FailWithMsg(c, 401, "user not found")
+	token, err := service.UserService.Login(user)
+	if err != nil {
+		http.FailWithMsg(c, 500, err.Error())
 		return
 	}
-	if userInfo.PassWord != user.PassWord {
-		http.FailWithMsg(c, 401, "pass world is incorrect")
-		return
-	}
-	// generator token
-	token, _ := auth.GenerateToken(userInfo)
 	// do login
 	http.OkWithData(c, token)
 }
@@ -42,9 +29,9 @@ func Register(c *gin.Context) {
 	if err := c.ShouldBindJSON(&user); err != nil {
 		http.FailWithMsg(c, 500, "parse parma error")
 	}
-	if err := service.UserService.Save(user); err != nil {
+	if err := service.UserService.Register(user); err != nil {
 		log.Println(err)
-		http.FailWithMsg(c, 500, "create user failed")
+		http.FailWithMsg(c, 500, "user register failed")
 	}
 	http.OkWithMsg(c, "register success")
 }
