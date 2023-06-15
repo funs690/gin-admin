@@ -1,0 +1,8 @@
+# idea
+.idea/*
+
+# go sum
+go.sum
+
+# *.exe
+./**/*.exe
