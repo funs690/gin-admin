@@ -24,7 +24,7 @@ func JwtHandler() gin.HandlerFunc {
 			}
 		}
 		// 添加返回数据
-		common.FailWithMsg(c, common.Unauthorized.Code, common.Unauthorized.Msg)
+		common.ResultWithError(c, common.Unauthorized)
 		// 请求直接返回
 		c.Abort()
 	}

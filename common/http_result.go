@@ -22,6 +22,11 @@ func Result(c *gin.Context, code int, msg string, data interface{}) {
 	c.JSON(http.StatusOK, HttpResult{code, msg, data})
 }
 
+// http result with error
+func ResultWithError(c *gin.Context, result HttpResult) {
+	c.JSON(http.StatusOK, result)
+}
+
 // http ok
 func Ok(c *gin.Context) {
 	OkWithData(c, nil)
