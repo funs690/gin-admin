@@ -4,5 +4,5 @@ import "gin-admin/service/upm"
 
 // service define
 var (
-	UserService = &upm.UserSvc{}
+	UserService = &upm.UserMgr{}
 )

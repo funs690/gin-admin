@@ -2,7 +2,7 @@ package index
 
 import (
 	"gin-admin/common"
-	"gin-admin/service"
+	service "gin-admin/service"
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -11,6 +11,6 @@ import (
 func Index(c *gin.Context) {
 	// test uid
 	log.Print(c.GetString("uid"))
-	service.UserService.Test()
-	common.OkWithMsg(c, "this is index!")
+	users := service.UserService.Test()
+	common.OkWithData(c, users)
 }

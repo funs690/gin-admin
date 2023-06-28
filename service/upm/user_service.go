@@ -16,16 +16,16 @@ type UserService interface {
 }
 
 // define service
-type UserSvc struct {
+type UserMgr struct {
 }
 
 // user save
-func (p *UserSvc) Register(user *models.User) error {
+func (p *UserMgr) Register(user *models.User) error {
 	return models.Save(user)
 }
 
 // user login
-func (p *UserSvc) Login(user *models.User) (string, error) {
+func (p *UserMgr) Login(user *models.User) (string, error) {
 	userInfo := models.FindOne(&models.User{UserName: user.UserName})
 	if userInfo.Id == "" {
 		return "", errors.New("user not found")
@@ -38,10 +38,10 @@ func (p *UserSvc) Login(user *models.User) (string, error) {
 }
 
 // 获取数据
-func (p *UserSvc) Test() {
-	users := models.FindList(&models.User{})
+func (p *UserMgr) Test() *[]models.User {
+	users := models.FindList(&models.User{Name: "张三"})
 	for _, user := range *users {
 		fmt.Print(user.UserName)
-
 	}
+	return users
 }
