@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"gin-admin/config"
-	models "gin-admin/models"
+	"gin-admin/models"
 	"gin-admin/routers"
 	"github.com/gin-gonic/gin"
 )
