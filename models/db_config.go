@@ -2,27 +2,21 @@ package models
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
+	"gin-admin/config"
 	"gorm.io/driver/postgres"
 	_ "gorm.io/driver/postgres"
-	gorm "gorm.io/gorm"
+	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"strconv"
 )
 
 var db *gorm.DB
 
 // init database
-func InitDbLink(config *viper.Viper) *gorm.DB {
-	database := config.GetStringMapString("database")
-	host := database["host"]
-	port, _ := strconv.Atoi(database["port"])
-	user := database["username"]
-	password := database["password"]
-	dbName := database["database"]
+func InitDbLink() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
-		host, user, password, dbName, port)
+		config.Database.Host, config.Database.Username, config.Database.Password,
+		config.Database.Database, config.Database.Port)
 	db, _ = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "tb_",
@@ -30,5 +24,4 @@ func InitDbLink(config *viper.Viper) *gorm.DB {
 		},
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-	return db
 }

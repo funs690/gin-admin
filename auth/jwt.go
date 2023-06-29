@@ -7,9 +7,6 @@ import (
 	"time"
 )
 
-var jwtConfig = config.InitJwtConfig()
-var jwtSecret = []byte(jwtConfig.GetString("jwt.secret"))
-
 type Claims struct {
 	Id       string `json:"uid""`
 	UserName string `json:"username"`
@@ -28,13 +25,13 @@ func GenerateToken(user *models.User) (string, error) {
 		UserName: user.UserName,
 		//PassWord: user.PassWord,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expireTime,                      // 过期时间
-			Issuer:    jwtConfig.GetString("jwt.sign"), //指定发行人
+			ExpiresAt: expireTime,      // 过期时间
+			Issuer:    config.Jwt.Sign, //指定发行人
 		},
 	}
 	// 该方法内部生成签名字符串，再用于获取完整、已签名的token
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(jwtSecret)
+	token, err := tokenClaims.SignedString([]byte(config.Jwt.Secret))
 	return token, err
 }
 
@@ -42,7 +39,7 @@ func GenerateToken(user *models.User) (string, error) {
 func ParseToken(token string) (*Claims, error) {
 	// 用于解析鉴权的声明，方法内部主要是具体的解码和校验的过程，最终返回*Token
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+		return []byte(config.Jwt.Secret), nil
 	})
 	if tokenClaims != nil {
 		// 从tokenClaims中获取到Claims对象，并使用断言，将该对象转换为我们自己定义的Claims
