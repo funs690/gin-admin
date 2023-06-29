@@ -32,60 +32,61 @@ var (
 	Server   *ServerConfig
 	Database *DataBaseConfig
 	Jwt      *JwtConfig
+	Viper    *viper.Viper
 )
 
 // init config
 func InitApplicationConfig() {
-	config := viper.New()
-	config.AddConfigPath("./conf/")
-	config.SetConfigName("application")
-	config.SetConfigType("yaml")
-	if err := config.ReadInConfig(); err != nil {
+	Viper = viper.New()
+	Viper.AddConfigPath("./conf/")
+	Viper.SetConfigName("application")
+	Viper.SetConfigType("yaml")
+	if err := Viper.ReadInConfig(); err != nil {
 		log.Fatal("Fatal error config file: %w \n", err)
 	}
 	//init server config
-	InitServerConfig(config)
+	InitServerConfig(Viper)
 	//init db config
-	InitDataBaseConfig(config)
+	InitDataBaseConfig(Viper)
 	//init jwt config
-	InitJwtConfig(config)
+	InitJwtConfig(Viper)
 }
 
 // set jwt info
-func InitJwtConfig(config *viper.Viper) {
+func InitJwtConfig(viper *viper.Viper) {
 	Jwt = new(JwtConfig)
-	jwtConfig := config.GetStringMapString("jwt")
-	Jwt.Sign = jwtConfig["sign"]
-	Jwt.Secret = jwtConfig["secret"]
+	config := viper.GetStringMapString("jwt")
+	Jwt.Sign = config["sign"]
+	Jwt.Secret = config["secret"]
 }
 
 // set database info
-func InitDataBaseConfig(config *viper.Viper) {
+func InitDataBaseConfig(viper *viper.Viper) {
 	Database = new(DataBaseConfig)
-	databaseConfig := config.GetStringMapString("database")
-	Database.Host = databaseConfig["host"]
-	if port, err := strconv.Atoi(databaseConfig["port"]); err != nil {
+	config := viper.GetStringMapString("database")
+	Database.Host = config["host"]
+	if port, err := strconv.Atoi(config["port"]); err != nil {
 		// set default
 		Database.Port = 0
 	} else {
 		Database.Port = port
 	}
-	Database.Username = databaseConfig["username"]
-	Database.Password = databaseConfig["password"]
-	Database.Database = databaseConfig["database"]
+	Database.Username = config["username"]
+	Database.Password = config["password"]
+	Database.Database = config["database"]
 }
 
 // set server info
-func InitServerConfig(config *viper.Viper) {
+func InitServerConfig(viper *viper.Viper) {
 	Server = new(ServerConfig)
-	serverConfig := config.GetStringMapString("server")
-	if port, err := strconv.Atoi(serverConfig["port"]); err != nil {
+	config := viper.GetStringMapString("server")
+	if port, err := strconv.Atoi(config["port"]); err != nil {
 		// set default
 		Server.Port = 8080
 	} else {
 		Server.Port = port
 	}
-	if addr := serverConfig["addr"]; addr == "" {
+	if addr := config["addr"]; addr == "" {
 		Server.Addr = "0.0.0.0"
 	} else {
 		Server.Addr = addr
