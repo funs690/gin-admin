@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-admin/config"
 	"gin-admin/models"
+	"gin-admin/redis"
 	"gin-admin/routers"
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,8 @@ func main() {
 	config.InitApplicationConfig()
 	// init database
 	models.InitDbLink()
+	// init redis
+	redis.InitRedisClient()
 	// init routes
 	routers.InitRouters(r)
 	// run server

@@ -37,4 +37,6 @@ func UserRouter(r *gin.Engine) {
 		// add user router
 		user.POST("/login", upm.Login)
 	}
+	// 注销单独使用handler
+	r.POST("/user/logout", auth.JwtHandler(), upm.Logout)
 }

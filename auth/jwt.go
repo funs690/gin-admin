@@ -8,22 +8,22 @@ import (
 )
 
 type Claims struct {
-	Id       string `json:"uid""`
-	UserName string `json:"username"`
-	//PassWord string `json:"password"`
+	Id        string `json:"uid""`
+	UserName  string `json:"username"`
+	SessionId string `json:"sessionId"`
 	jwt.StandardClaims
 }
 
 // 生成token方法
-func GenerateToken(user *models.User) (string, error) {
+func GenerateToken(user *models.User, sessionId string) (string, error) {
 	nowTime := time.Now()
 	// 设置token 过期时间 1天
 	expireTime := nowTime.Add(time.Hour * 24).Unix()
 	// 生成 claims
 	claims := Claims{
-		Id:       user.Id,
-		UserName: user.UserName,
-		//PassWord: user.PassWord,
+		Id:        user.Id,
+		UserName:  user.UserName,
+		SessionId: sessionId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime,      // 过期时间
 			Issuer:    config.Jwt.Sign, //指定发行人

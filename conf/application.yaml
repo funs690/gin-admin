@@ -8,6 +8,12 @@ database:
   username: beego
   password: Abc123++
 
+redis:
+  host: 183.129.217.214
+  port: 20192
+  database: 3
+  password: QAZwsx123++
+
 jwt:
   secret: Zjuici888***
   sign: Zjuici

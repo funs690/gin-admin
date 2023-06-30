@@ -27,11 +27,19 @@ type JwtConfig struct {
 	Sign   string
 }
 
+type RedisConfig struct {
+	Host     string
+	Port     int
+	Password string
+	Database int
+}
+
 // set config
 var (
 	Server   *ServerConfig
 	Database *DataBaseConfig
 	Jwt      *JwtConfig
+	Redis    *RedisConfig
 	Viper    *viper.Viper
 )
 
@@ -50,6 +58,28 @@ func InitApplicationConfig() {
 	InitDataBaseConfig(Viper)
 	//init jwt config
 	InitJwtConfig(Viper)
+	//init redis config
+	InitRedisConfig(Viper)
+}
+
+// init redis config
+func InitRedisConfig(viper *viper.Viper) {
+	Redis = new(RedisConfig)
+	config := viper.GetStringMapString("redis")
+	Redis.Host = config["host"]
+	if port, err := strconv.Atoi(config["port"]); err != nil {
+		// set default
+		Redis.Port = 6379
+	} else {
+		Redis.Port = port
+	}
+	Redis.Password = config["password"]
+	if database, err := strconv.Atoi(config["database"]); err != nil {
+		// set default
+		Redis.Database = 0
+	} else {
+		Redis.Database = database
+	}
 }
 
 // set jwt info

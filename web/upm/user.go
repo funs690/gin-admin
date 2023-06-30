@@ -14,13 +14,13 @@ func Login(c *gin.Context) {
 	if err := c.ShouldBindJSON(&user); err != nil {
 		http.FailWithMsg(c, 500, "parse parma error")
 	}
-	token, err := service.UserService.Login(user)
+	session, err := service.UserService.Login(user)
 	if err != nil {
 		http.FailWithMsg(c, 500, err.Error())
 		return
 	}
 	// do login
-	http.OkWithData(c, token)
+	http.OkWithData(c, session)
 }
 
 // do register
@@ -34,4 +34,15 @@ func Register(c *gin.Context) {
 		http.FailWithMsg(c, 500, "user register failed")
 	}
 	http.OkWithMsg(c, "register success")
+}
+
+// do logout
+func Logout(c *gin.Context) {
+	sessionId := c.GetString("sessionId")
+	err := service.UserService.Logout(sessionId)
+	if err != nil {
+		http.FailWithMsg(c, 500, err.Error())
+		return
+	}
+	http.OkWithMsg(c, "login out success")
 }

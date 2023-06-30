@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"fmt"
 	"gin-admin/common"
+	"gin-admin/redis"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -16,11 +18,15 @@ func JwtHandler() gin.HandlerFunc {
 			// 解析token
 			claims, err := ParseToken(token)
 			if err == nil && time.Now().Unix() <= claims.ExpiresAt {
-				// 设置uid
-				c.Set("uid", claims.Id)
-				// 请求继续
-				c.Next()
-				return
+				// 如果token有效， 需要检查当前登录session
+				if session, _ := redis.Get(fmt.Sprintf("Authorization:login:session:%s", claims.SessionId)); session != "" {
+					// 设置uid
+					c.Set("uid", claims.Id)
+					c.Set("sessionId", claims.SessionId)
+					// 请求继续
+					c.Next()
+					return
+				}
 			}
 		}
 		// 添加返回数据
