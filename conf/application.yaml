@@ -9,8 +9,8 @@ database:
   password: Abc123++
 
 redis:
-  host: 183.129.217.214
-  port: 20192
+  host: 127.0.0.1
+  port: 6379
   database: 3
   password: QAZwsx123++
 
