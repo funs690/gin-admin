@@ -12,8 +12,8 @@ redis:
   host: 127.0.0.1
   port: 6379
   database: 3
-  password: QAZwsx123++
+  password: Abc123++
 
 jwt:
-  secret: Zjuici888***
-  sign: Zjuici
+  secret: Abc123++
+  sign: Abc123++
